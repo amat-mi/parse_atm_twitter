@@ -21,8 +21,6 @@ def tweet_interpreter(dict_tweet,id):
     # in questo punto è possibile inserire filtri
     # TODO: verificare se necezzario filtrare i twitter con reply !=0 per eliminare i tweet di risposta ad utenti #if not row['reply']
     # TODO: verificare se necezzario filtrare i RT
-
-
     # isolo il testo del twitter per interpretarlo
     tweet = dict_tweet['tweet']
     # se un tweet inizia con un numero viene escluso perchè contiene info su date future
@@ -50,13 +48,6 @@ def tweet_interpreter(dict_tweet,id):
             d['tipo_evento'] = 1
         d['data'] = dict_tweet['data']
         interpreted_tweet.append(d)
-    return interpreted_tweet
-
-def tweet_interpreter_test(dict_tweet):
-    d={}
-    d['linea'] = dict_tweet['tweet']
-    interpreted_tweet=[]
-    interpreted_tweet.append(d)
     return interpreted_tweet
 
 
@@ -88,13 +79,8 @@ class TweetStreamListener(StreamListener):
         #d['user'] = dict_data["screen_name"]
         dict_data_filter['reply_to'] = dict_data["in_reply_to_screen_name"]
         print dict_data_filter
-
-
         # write to file
-
-
         tweet_write_file(tweet_interpreter_test(dict_data_filter),filename)
-
 
 
     # on failure
@@ -107,7 +93,6 @@ class TweetStreamListener(StreamListener):
 
 if __name__ == '__main__':
 
-
     # create instance of the tweepy tweet stream listener
     listener = TweetStreamListener()
 
@@ -118,8 +103,8 @@ if __name__ == '__main__':
     # create instance of the tweepy stream
     stream = Stream(auth, listener)
 
-    #print tweet_interpreter('#bus54 #bus60 #bus61 #bus73 #busX73 #bus94: possibili deviazioni e rallentamenti (manifestazione in zona p.za San Babila). #ATM #Milano')
-    #print tweet_interpreter ({'reply_to': 'atm_informa', 'tweet': '#bus54 #bus60 #bus61 #bus73 #busX73 #bus94: possibili deviazioni e rallentamenti (manifestazione in zona p.za San Babila). #ATM #Milano', 'data': 'Wed Mar 25 16:39:31'})
+    #use for test:
+    #stream.filter(track=['congress'])
+
     # search twitter for "@atm_informa" user
-    #stream.filter(follow = ['988355810'], languages = ['it'])
-    stream.filter(track=['congress'])
+    stream.filter(follow = ['988355810'], languages = ['it'])
