@@ -8,6 +8,7 @@ from tweepy import Stream
 from textblob import TextBlob
 import HTMLParser
 import re
+import requests
 
 
 # import twitter keys and tokens
@@ -21,7 +22,7 @@ def tweet_interpreter(dict_tweet):
     # TODO: verificare se necezzario filtrare i twitter con reply !=0 per eliminare i tweet di risposta ad utenti #if not row['reply']
     # TODO: verificare se necezzario filtrare i RT
     # isolo il testo del twitter per interpretarlo
-    tweet = dict_tweet['tweet']
+    tweet = dict_tweet['testo']
     # se un tweet inizia con un numero viene escluso perchè contiene info su date future
     not_interpreted_tweet=[]
     if re.match(r'(\d)',tweet[0]):
@@ -44,14 +45,14 @@ def tweet_interpreter(dict_tweet):
                 d['linea'] = re.search(r'\#(\w\d)',i).group(1) # testo+numeri dopo # per MM
             else:
                 d['linea'] = re.search(r'\d+',i).group() # solo numeri per superficie
-            # tipo_evento [1 = aperto, 0 = chiuso]
+            # tipo [0 = non evento, 1 = aperto, 2 = continuazione, 3 = chiuso]
             if re.search(r'riprend|prosegue',tweet):
-                d['tipo_evento'] = 0
+                d['tipo'] = 3
             else:
-                d['tipo_evento'] = 1
-            d['data'] = dict_tweet['data']
-            d['tweet'] = dict_tweet['tweet']
-            d['type'] = 1
+                ### non è gestito l'evento continuazione: di default sono tutti di apertura = 1
+                d['tipo'] = 1
+            d['stamp'] = dict_tweet['stamp']
+            d['testo'] = dict_tweet['testo']
             interpreted_tweet.append(d)
         return interpreted_tweet
     else:
@@ -59,13 +60,17 @@ def tweet_interpreter(dict_tweet):
         return not_interpreted_tweet
 
 
+def tweet_post(dict_tweet):
+    print dict_tweet
+    r = requests.post("http://192.1.1.153:8000/tweet/tweet/upload/", data=json.dumps(dict_tweet))
+    print r.text
 
 def tweet_write_file(dict_tweet,filename):
 
     #TODO : scrivere l'head una sola volta
     with open(filename,'a') as f:
-        fieldnames = ('data','id_evento','tipo_evento','linea','tweet', 'type')
-        csvwriter = csv.DictWriter(f,delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_NONNUMERIC)
+        fieldnames = ('data','id_evento','tipo','linea','tweet')
+        csvwriter = csv.DictWriter(f, delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_NONNUMERIC)
         csvwriter.writeheader()
         for row in dict_tweet:
             csvwriter.writerow(row)
@@ -80,8 +85,6 @@ class TweetStreamListener(StreamListener):
         h= HTMLParser.HTMLParser()
         # decode json
         dict_data = json.loads(data)
-        #print dict_data
-        print '---------------'
         #print dict_data ['retweeted']
         #print dict_data ['in_reply_to_screen_name']
         if  dict_data.get ('retweeted', None):
@@ -91,13 +94,13 @@ class TweetStreamListener(StreamListener):
         # TODO filter on dict_data using underscore
         else:
             dict_data_filter={}
-            dict_data_filter['type'] = 0
-            dict_data_filter['tweet'] = dict_data[h.unescape("text")]
-            dict_data_filter['data'] = dict_data["created_at"]
+            dict_data_filter['tipo'] = 0
+            dict_data_filter['testo'] = dict_data[h.unescape("text")]
+            dict_data_filter['stamp'] = dict_data["created_at"]
             #d['user'] = dict_data["screen_name"]
             #dict_data_filter['reply_to'] = dict_data["in_reply_to_screen_name"]
-            tweet_write_file(tweet_interpreter(dict_data_filter),filename)
-
+            #tweet_write_file(tweet_interpreter(dict_data_filter),filename)
+            tweet_post(tweet_interpreter(dict_data_filter))
 
     # on failure
     def on_error(self, status):
