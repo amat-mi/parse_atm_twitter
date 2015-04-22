@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
+import HTMLParser
 import json
-import unicodecsv as csv
-from tweepy.streaming import StreamListener
+import re
+
+import requests
+from textblob import TextBlob
 from tweepy import OAuthHandler
 from tweepy import Stream
-from textblob import TextBlob
-import HTMLParser
-import re
-import requests
+from tweepy.streaming import StreamListener
+from twitter_keys import *
+import unicodecsv as csv
 
 
 # import twitter keys and tokens
-from twitter_keys import *
-
 filename = '/home/franco/workspace/amat/tweet/tweet_route.csv'
 
 
@@ -61,8 +61,9 @@ def tweet_interpreter(dict_tweet):
 
 
 def tweet_post(dict_tweet):
-    print dict_tweet
-    r = requests.post("http://192.1.1.153:8000/tweet/tweet/upload/", data=json.dumps(dict_tweet))
+#     print dict_tweet
+#     r = requests.post("http://192.1.1.153:8000/tweet/tweet/upload/", data=json.dumps(dict_tweet))
+    r = requests.put("http://127.0.0.1:8000/tweet/tweet/upload/", json=json.dumps(dict_tweet))
     print r.text
 
 def tweet_write_file(dict_tweet,filename):
