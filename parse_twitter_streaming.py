@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import HTMLParser
-import datetime
 import json
 import re
 import sys
+
+from email.utils import parsedate_tz
+from datetime import datetime, timedelta
+import pytz
 
 import requests
 from textblob import TextBlob
@@ -21,6 +24,8 @@ filename = '/home/franco/workspace/amat/tweet/tweet_route.csv'
 
 
 def tweet_interpreter(dict_tweet):
+#     print dict_tweet
+    
     # in questo punto è possibile inserire filtri
     # TODO: verificare se necezzario filtrare i twitter con reply !=0 per eliminare i tweet di risposta ad utenti #if not row['reply']
     # TODO: verificare se necezzario filtrare i RT
@@ -80,6 +85,11 @@ def tweet_write_file(dict_tweet,filename):
         f.close
 
 
+def to_datetime(datestring):
+    time_tuple = parsedate_tz(datestring.strip())
+    dt = datetime(*time_tuple[:6])
+    return dt - timedelta(seconds=time_tuple[-1])
+
 
 class TweetStreamListener(StreamListener):
 
@@ -99,7 +109,7 @@ class TweetStreamListener(StreamListener):
             dict_data_filter={}
             dict_data_filter['tipo'] = 0
             dict_data_filter['testo'] = dict_data[h.unescape("text")]
-            dict_data_filter['stamp'] = dict_data["created_at"]
+            dict_data_filter['stamp'] = pytz.utc.localize(to_datetime(dict_data["created_at"])).isoformat()
             #d['user'] = dict_data["screen_name"]
             #dict_data_filter['reply_to'] = dict_data["in_reply_to_screen_name"]
             #tweet_write_file(tweet_interpreter(dict_data_filter),filename)
@@ -133,8 +143,15 @@ if __name__ == '__main__':
     #stream.filter(track=['congress'])
 
     # search twitter for "@atm_informa" user
-    stream.filter(follow = ['988355810'], languages = ['it'])
+#     stream.filter(follow = ['988355810'], languages = ['it'])
 
     # search twitter for "@testsforapp" user
 #     stream.filter(follow = ['2768232307'], languages = ['it'])
+
+    # search both twitter for "@atm_informa" user and "@testsforapp" user 
+    stream.filter(follow = ['988355810','2768232307'], languages = ['it'])
+
+    # search twitter for "@testsforapp" user
+#     stream.filter(follow = ['2768232307'], languages = ['it'])
+
     print 'ok_user'
