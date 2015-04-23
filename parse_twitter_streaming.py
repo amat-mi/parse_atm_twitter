@@ -126,7 +126,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         dict_data_filter={}
         dict_data_filter['testo'] = sys.argv[1]
-        dict_data_filter['stamp'] = datetime.datetime.now().isoformat()
+        dict_data_filter['stamp'] = datetime.now().isoformat()
         tweet_post(tweet_interpreter(dict_data_filter))
         sys.exit()
 
