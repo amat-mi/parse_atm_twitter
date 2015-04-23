@@ -133,8 +133,8 @@ if __name__ == '__main__':
     #stream.filter(track=['congress'])
 
     # search twitter for "@atm_informa" user
-    #stream.filter(follow = ['988355810'], languages = ['it'])
+    stream.filter(follow = ['988355810'], languages = ['it'])
 
     # search twitter for "@testsforapp" user
-    stream.filter(follow = ['2768232307'], languages = ['it'])
+#     stream.filter(follow = ['2768232307'], languages = ['it'])
     print 'ok_user'
