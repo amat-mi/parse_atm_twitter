@@ -108,7 +108,7 @@ class TweetStreamListener(StreamListener):
         else:
             dict_data_filter={}
             dict_data_filter['tipo'] = 0
-            dict_data_filter['testo'] = dict_data[h.unescape("text")]
+            dict_data_filter['testo'] = h.unescape(dict_data["text"])
             dict_data_filter['stamp'] = pytz.utc.localize(to_datetime(dict_data["created_at"])).isoformat()
             #d['user'] = dict_data["screen_name"]
             #dict_data_filter['reply_to'] = dict_data["in_reply_to_screen_name"]
