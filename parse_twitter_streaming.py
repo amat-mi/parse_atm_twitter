@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import HTMLParser
+import datetime
 import json
 import re
+import sys
 
 import requests
 from textblob import TextBlob
 from tweepy import OAuthHandler
 from tweepy import Stream
 from tweepy.streaming import StreamListener
+
 from twitter_keys import *
 import unicodecsv as csv
 
@@ -62,9 +65,8 @@ def tweet_interpreter(dict_tweet):
 
 def tweet_post(dict_tweet):
 #     print dict_tweet
-#     r = requests.post("http://192.1.1.153:8000/tweet/tweet/upload/", data=json.dumps(dict_tweet))
-    r = requests.put("http://127.0.0.1:8000/tweet/tweet/upload/", json=json.dumps(dict_tweet))
-    print r.text
+      r = requests.put("http://127.0.0.1:8000/tweet/tweet/upload/", json=dict_tweet)
+      print r.text
 
 def tweet_write_file(dict_tweet,filename):
 
@@ -109,9 +111,14 @@ class TweetStreamListener(StreamListener):
 
 
 
-
-
 if __name__ == '__main__':
+
+    if len(sys.argv) > 1:
+        dict_data_filter={}
+        dict_data_filter['testo'] = sys.argv[1]
+        dict_data_filter['stamp'] = datetime.datetime.now().isoformat()
+        tweet_post(tweet_interpreter(dict_data_filter))
+        sys.exit()
 
     # create instance of the tweepy tweet stream listener
     listener = TweetStreamListener()
