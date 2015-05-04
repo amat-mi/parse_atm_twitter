@@ -5,24 +5,20 @@ tenere in locale il file twitter_keys.py con le chiavi di accesso così struttur
 
 # Installazione in Ubuntu
 
-Creare il file di configurazione per upstart:
+Installare il file di configurazione per upstart:
 
-    sudo pico /etc/init/parse_atm_twitter.conf
+    sudo cp parse_atm_twitter.conf /etc/init/
+    sudo chown root.root /etc/init/parse_atm_twitter.conf
+    sudo chmod u=rw,go=r /etc/init/parse_atm_twitter.conf
     
-con il seguente contenuto:
-
-    description "Parses and filters Tweets from ATM and send them to Django"
-
-    start on runlevel [2345]
-    stop on runlevel [!2345]
-
-    respawn
-
-    exec python /var/www/django/projects/parse_atm_twitter/parse_twitter_streaming.py
-
 e attivare il servizio con il comando:
 
-    sudo service parse_atm_twitter start
+    sudo initctl start parse_atm_twitter
+    
+Il log è visibile con il comando:
+
+     sudo cat /var/log/upstart/parse_atm_twitter.log
+     
 
 
     
