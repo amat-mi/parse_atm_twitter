@@ -25,7 +25,7 @@ filename = '/home/franco/workspace/amat/tweet/tweet_route.csv'
 
 def tweet_interpreter(dict_tweet):
 #     print dict_tweet
-    
+
     # in questo punto è possibile inserire filtri
     # TODO: verificare se necezzario filtrare i twitter con reply !=0 per eliminare i tweet di risposta ad utenti #if not row['reply']
     # TODO: verificare se necezzario filtrare i RT
@@ -99,10 +99,10 @@ class TweetStreamListener(StreamListener):
         h= HTMLParser.HTMLParser()
         # decode json
         dict_data = json.loads(data)
-        #print dict_data ['retweeted']
-        #print dict_data ['in_reply_to_screen_name']
-        if  dict_data.get ('retweeted', None):
+        # filter retweet
+        if  dict_data.get ('retweeted', False) is False:
             return
+        # filter reply to
         if dict_data.get ('in_reply_to_screen_name', None) is not None:
             return
         # TODO filter on dict_data using underscore
@@ -149,7 +149,7 @@ if __name__ == '__main__':
     # search twitter for "@testsforapp" user
 #     stream.filter(follow = ['2768232307'], languages = ['it'])
 
-    # search both twitter for "@atm_informa" user and "@testsforapp" user 
+    # search both twitter for "@atm_informa" user and "@testsforapp" user
     stream.filter(follow = ['988355810','2768232307'], languages = ['it'])
 
     # search twitter for "@testsforapp" user
