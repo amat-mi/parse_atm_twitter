@@ -96,25 +96,25 @@ class TweetStreamListener(StreamListener):
 
     # on success
     def on_data(self, data):
-        h= HTMLParser.HTMLParser()
         # decode json
         dict_data = json.loads(data)
         # filter retweet
-        if  dict_data.get ('retweeted', False) is False:
+        if  dict_data.get ('retweeted_status', None) is not None:
             return
         # filter reply to
         if dict_data.get ('in_reply_to_screen_name', None) is not None:
             return
         # TODO filter on dict_data using underscore
-        else:
-            dict_data_filter={}
-            dict_data_filter['tipo'] = 0
-            dict_data_filter['testo'] = h.unescape(dict_data["text"])
-            dict_data_filter['stamp'] = pytz.utc.localize(to_datetime(dict_data["created_at"])).isoformat()
-            #d['user'] = dict_data["screen_name"]
-            #dict_data_filter['reply_to'] = dict_data["in_reply_to_screen_name"]
-            #tweet_write_file(tweet_interpreter(dict_data_filter),filename)
-            tweet_post(tweet_interpreter(dict_data_filter))
+        
+        h= HTMLParser.HTMLParser()
+        dict_data_filter={}
+        dict_data_filter['tipo'] = 0
+        dict_data_filter['testo'] = h.unescape(dict_data["text"])
+        dict_data_filter['stamp'] = pytz.utc.localize(to_datetime(dict_data["created_at"])).isoformat()
+        #d['user'] = dict_data["screen_name"]
+        #dict_data_filter['reply_to'] = dict_data["in_reply_to_screen_name"]
+        #tweet_write_file(tweet_interpreter(dict_data_filter),filename)
+        tweet_post(tweet_interpreter(dict_data_filter))
 
     # on failure
     def on_error(self, status):
