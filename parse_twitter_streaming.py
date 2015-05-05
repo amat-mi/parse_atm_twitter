@@ -49,10 +49,12 @@ def tweet_interpreter(dict_tweet):
         for i in linee:
             d={}
             # linea
-            if re.search(r'M',i): # se MM
-                d['linea'] = re.search(r'\#(\w\d)',i).group(1) # testo+numeri dopo # per MM
-            else:
-                d['linea'] = re.search(r'\d+',i).group() # solo numeri per superficie
+            m = re.search(r'\#(\w+)(\d+)',i)    #separa testo e numero
+            d['linea'] = m.group(1).replace('bus','B').replace('tram','T') + m.group(2)            
+#             if re.search(r'M',i): # se MM
+#                 d['linea'] = re.search(r'\#(\w\d)',i).group(1) # testo+numeri dopo # per MM
+#             else:
+#                 d['linea'] = re.search(r'\d+',i).group() # solo numeri per superficie
             # tipo [0 = non evento, 1 = aperto, 2 = continuazione, 3 = chiuso]
             if re.search(r'riprend|prosegue',tweet):
                 d['tipo'] = 3
