@@ -72,9 +72,12 @@ def tweet_interpreter(dict_tweet):
 
 def tweet_post(dict_tweet):
 #     print dict_tweet
-#       r = requests.put("http://127.0.0.1:8000/tweet/tweet/upload/", json=dict_tweet)
-      r = requests.put("https://dati.amat-mi.it/tweet/tweet/upload/", json=dict_tweet)
-      print r.text
+      #bisogna inviare ogni tweet separatamente, se sono più di uno
+      tweets = [dict_tweet] if isinstance(dict_tweet,dict) else dict_tweet 
+      for tweet in tweets: 
+#           r = requests.put("http://127.0.0.1:8000/tweet/tweet/upload/", json=dict_tweet)
+          r = requests.put("https://dati.amat-mi.it/tweet/tweet/upload/", json=tweet)
+          print r.text
 
 def tweet_write_file(dict_tweet,filename):
 
