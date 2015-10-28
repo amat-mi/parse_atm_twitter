@@ -32,8 +32,10 @@ def tweet_interpreter(dict_tweet):
     dict_tweet.setdefault('stamp',datetime.now().isoformat())    
     ### estrae l'eventuale causa (Es: "(lavori stradali)") e la imposta, se non già presente
     ### se sono presenti più blocchi di testo tra parentesi, non imposta la causa
+    ### NOOO!!! Se ci sono più blocchi, usiamo l'ultimo!!!
     cause = re.findall(r'\(([^\)]*)\)',testo)
-    causa = cause[0] if len(cause) == 1 else None 
+#     causa = cause[0] if len(cause) == 1 else None 
+    causa = cause[-1] if len(cause) >= 1 else None 
     dict_tweet.setdefault('causa',causa)    
     ### se un tweet inizia con un numero viene escluso perchè contiene info su date future
     if re.match(r'(\d)',testo[0]):
