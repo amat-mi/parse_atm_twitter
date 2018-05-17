@@ -130,35 +130,39 @@ class TweetStreamListener(StreamListener):
 
 if __name__ == '__main__':
 
-    if len(sys.argv) > 1:
-        dict_data_filter={}
-        dict_data_filter['testo'] = sys.argv[1]
-        dict_data_filter['stamp'] = datetime.now().isoformat()
-        tweet_post(tweet_interpreter(dict_data_filter))
-        sys.exit()
-
-    # create instance of the tweepy tweet stream listener
-    listener = TweetStreamListener()
-    # set twitter keys/tokens
-    auth = OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_key, access_secret)
-
-    # create instance of the tweepy stream
-    stream = Stream(auth, listener)
-
-    #use for test:
-    #stream.filter(track=['congress'])
-
-    # search twitter for "@atm_informa" user
-#     stream.filter(follow = ['988355810'], languages = ['it'])
-
-    # search twitter for "@testsforapp" user
-#     stream.filter(follow = ['2768232307'], languages = ['it'])
-
-    # search both twitter for "@atm_informa" user and "@testsforapp" user
-    stream.filter(follow = ['988355810','2768232307'], languages = ['it'])
-
-    # search twitter for "@testsforapp" user
-#     stream.filter(follow = ['2768232307'], languages = ['it'])
-
-    print 'ok_user'
+    try:
+      if len(sys.argv) > 1:
+          dict_data_filter={}
+          dict_data_filter['testo'] = sys.argv[1]
+          dict_data_filter['stamp'] = datetime.now().isoformat()
+          tweet_post(tweet_interpreter(dict_data_filter))
+          sys.exit()
+  
+      # create instance of the tweepy tweet stream listener
+      listener = TweetStreamListener()
+      # set twitter keys/tokens
+      auth = OAuthHandler(consumer_key, consumer_secret)
+      auth.set_access_token(access_key, access_secret)
+  
+      # create instance of the tweepy stream
+      stream = Stream(auth, listener)
+  
+      #use for test:
+      #stream.filter(track=['congress'])
+  
+      # search twitter for "@atm_informa" user
+  #     stream.filter(follow = ['988355810'], languages = ['it'])
+  
+      # search twitter for "@testsforapp" user
+  #     stream.filter(follow = ['2768232307'], languages = ['it'])
+  
+      # search both twitter for "@atm_informa" user and "@testsforapp" user
+      stream.filter(follow = ['988355810','2768232307'], languages = ['it'])
+  
+      # search twitter for "@testsforapp" user
+  #     stream.filter(follow = ['2768232307'], languages = ['it'])
+  
+      print 'ok_user'
+    except Exception, exc:
+      print str(exc)
+ 
