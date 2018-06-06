@@ -21,6 +21,26 @@ Creare un virtualenv con python3, per esempio:
 
     virtualenv3 c:\Users\Paolo\venv\parse_atm_twitter
     
+## Ubuntu
+
+Creare virtual env per il progetto:
+	
+    virtualenv /var/www/django/venv/parse_atm_twitter
+
+Clonare i repository necessari:
+
+    cd /var/www/django/projects
+    git clone https://github.com/amat-mi/parse_atm_twitter.git
+    
+__ATTENZIONE!!!__ Se necessario fare git switchout sul branch opportuno!!!
+
+Attivare il virtualenv ed installare i requirements:
+
+    . /var/www/django/venv/parse_atm_twitter/bin/activate
+    cd /var/www/django/projects/parse_atm_twitter
+    pip install -r requirements.txt
+    deactivate
+
 ## Ubuntu <15.10 (using upstart)
 
 Installare il file di configurazione per upstart:

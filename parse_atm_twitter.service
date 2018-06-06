@@ -2,7 +2,8 @@
 Description=systemd unit file for parse_atm_twitter
 
 [Service]
-ExecStart=/var/www/node/projects/run_stm-ext.sh
+ExecStart=/var/www/django/venv/parse_atm_twitter/bin/python /var/www/django/projects/parse_atm_twitter/parse_twitter_streaming.py
+
 Restart=always
 RestartSec=10                       # Restart service after 10 seconds if it crashes
 StandardOutput=syslog               # Output to syslog
