@@ -13,7 +13,7 @@ from tweepy import OAuthHandler
 from tweepy import Stream
 from tweepy.streaming import StreamListener
 
-from twitter_keys import *
+from local_secrets import *
 
 
 def tweet_interpreter(dict_tweet):
@@ -66,11 +66,11 @@ def tweet_interpreter(dict_tweet):
 
 def tweet_post(dict_tweet):
 #     print(dict_tweet)
+      headers = {'Authentication': 'Bearer {}'.format(AMAT_TWEET_SERVER_TOKEN)}
       #bisogna inviare ogni tweet separatamente, se sono più di uno
       tweets = [dict_tweet] if isinstance(dict_tweet,dict) else dict_tweet 
       for tweet in tweets: 
-#           r = requests.post("http://127.0.0.1:8000/tweet/tweet/upload/", json=tweet)
-          r = requests.post("https://dati.amat-mi.it/tweet/tweet/upload/", json=tweet)
+          r = requests.post(AMAT_TWEET_SERVER_URL, json=tweet, headers=headers)
           print(r.text)
 
 
@@ -121,8 +121,8 @@ if __name__ == '__main__':
       # create instance of the tweepy tweet stream listener
       listener = TweetStreamListener()
       # set twitter keys/tokens
-      auth = OAuthHandler(consumer_key, consumer_secret)
-      auth.set_access_token(access_key, access_secret)
+      auth = OAuthHandler(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET)
+      auth.set_access_token(TWITTER_ACCESS_KEY, TWITTER_ACCESS_SECRET)
   
       # create instance of the tweepy stream
       stream = Stream(auth, listener)
