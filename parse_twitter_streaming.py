@@ -10,17 +10,11 @@ from datetime import datetime, timedelta
 import pytz
 
 import requests
-from textblob import TextBlob
 from tweepy import OAuthHandler
 from tweepy import Stream
 from tweepy.streaming import StreamListener
 
 from twitter_keys import *
-import unicodecsv as csv
-
-
-# import twitter keys and tokens
-filename = '/home/franco/workspace/amat/tweet/tweet_route.csv'
 
 
 def tweet_interpreter(dict_tweet):
@@ -80,17 +74,6 @@ def tweet_post(dict_tweet):
           r = requests.post("https://dati.amat-mi.it/tweet/tweet/upload/", json=tweet)
           print r.text
 
-def tweet_write_file(dict_tweet,filename):
-
-    #TODO : scrivere l'head una sola volta
-    with open(filename,'a') as f:
-        fieldnames = ('data','id_evento','tipo','linea','tweet')
-        csvwriter = csv.DictWriter(f, delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_NONNUMERIC)
-        csvwriter.writeheader()
-        for row in dict_tweet:
-            csvwriter.writerow(row)
-        f.close
-
 
 def to_datetime(datestring):
     time_tuple = parsedate_tz(datestring.strip())
@@ -119,7 +102,6 @@ class TweetStreamListener(StreamListener):
         dict_data_filter['stamp'] = pytz.utc.localize(to_datetime(dict_data["created_at"])).isoformat()
         #d['user'] = dict_data["screen_name"]
         #dict_data_filter['reply_to'] = dict_data["in_reply_to_screen_name"]
-        #tweet_write_file(tweet_interpreter(dict_data_filter),filename)
         tweet_post(tweet_interpreter(dict_data_filter))
 
     # on failure
