@@ -1,0 +1,10 @@
+# -*- coding: utf-8 -*-
+
+TWITTER_CONSUMER_KEY = '35hmOlLstMXQSHqEeglsRNo4c'
+TWITTER_CONSUMER_SECRET = 'RURvLGmZDG5CzoK6YGWdUziqyQK9Kmgq08eAzVP9CxVRMITQry'
+TWITTER_ACCESS_KEY = '2768232307-At6BH1xIbK3lAKz55Ne8N6B7UIlPRJJCvgno29N'
+TWITTER_ACCESS_SECRET = 'vAW2pC07OUscCUZ0WkHKPtXWH7maGNv9sHYNeqTsSUJ1m'
+#AMAT_TWEET_SERVER_URL = 'http://localhost:9001/tweet/tweet/upload/'
+AMAT_TWEET_SERVER_URL = 'http://172.20.8.40/tweet/tweet/upload/'
+#AMAT_TWEET_SERVER_URL = 'https://dati.amat-mi.it/tweet/tweet/upload/'
+AMAT_TWEET_SERVER_TOKEN = 'orR45Ttgh76EwgHjklBgBHn5ghHyuf'

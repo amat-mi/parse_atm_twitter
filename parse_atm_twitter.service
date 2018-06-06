@@ -1,0 +1,13 @@
+[Unit]
+Description=systemd unit file for parse_atm_twitter
+
+[Service]
+ExecStart=/var/www/node/projects/run_stm-ext.sh
+Restart=always
+RestartSec=10                       # Restart service after 10 seconds if it crashes
+StandardOutput=syslog               # Output to syslog
+StandardError=syslog                # Output to syslog
+SyslogIdentifier=parse_atm_twitter
+
+[Install]
+WantedBy=multi-user.target
