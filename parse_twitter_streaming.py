@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import HTMLParser
+from datetime import datetime, timedelta
+from email.utils import parsedate_tz
+import html
 import json
 import re
 import sys
 
-from email.utils import parsedate_tz
-from datetime import datetime, timedelta
 import pytz
-
 import requests
 from tweepy import OAuthHandler
 from tweepy import Stream
@@ -66,13 +65,13 @@ def tweet_interpreter(dict_tweet):
 
 
 def tweet_post(dict_tweet):
-#     print dict_tweet
+#     print(dict_tweet)
       #bisogna inviare ogni tweet separatamente, se sono più di uno
       tweets = [dict_tweet] if isinstance(dict_tweet,dict) else dict_tweet 
       for tweet in tweets: 
 #           r = requests.post("http://127.0.0.1:8000/tweet/tweet/upload/", json=tweet)
           r = requests.post("https://dati.amat-mi.it/tweet/tweet/upload/", json=tweet)
-          print r.text
+          print(r.text)
 
 
 def to_datetime(datestring):
@@ -95,10 +94,9 @@ class TweetStreamListener(StreamListener):
             return
         # TODO filter on dict_data using underscore
         
-        h= HTMLParser.HTMLParser()
         dict_data_filter={}
         dict_data_filter['tipo'] = 0
-        dict_data_filter['testo'] = h.unescape(dict_data["text"])
+        dict_data_filter['testo'] = html.unescape(dict_data["text"])
         dict_data_filter['stamp'] = pytz.utc.localize(to_datetime(dict_data["created_at"])).isoformat()
         #d['user'] = dict_data["screen_name"]
         #dict_data_filter['reply_to'] = dict_data["in_reply_to_screen_name"]
@@ -106,7 +104,7 @@ class TweetStreamListener(StreamListener):
 
     # on failure
     def on_error(self, status):
-        print status
+        print(status)
 
 
 
@@ -144,7 +142,7 @@ if __name__ == '__main__':
       # search twitter for "@testsforapp" user
   #     stream.filter(follow = ['2768232307'], languages = ['it'])
   
-      print 'ok_user'
-    except Exception, exc:
-      print str(exc)
+      print('ok_user')
+    except Exception as exc:
+      print(str(exc))
  
