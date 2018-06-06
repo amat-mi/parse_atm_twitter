@@ -74,6 +74,10 @@ Per verificare lo stato del servizio:
     
     sudo systemctl status parse_atm_twitter.service
 
+Per vedere i log del servizio:
+
+    sudo journalctl -t parse_atm_twitter
+
 ATTENZIONE!!! Se si modifica il file di configurazione, è necessario aggiornarlo con i comandi:
 
     sudo systemctl daemon-reload
