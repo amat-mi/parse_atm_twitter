@@ -66,7 +66,7 @@ def tweet_interpreter(dict_tweet):
 
 def tweet_post(dict_tweet):
 #     print(dict_tweet)
-      headers = {'Authentication': 'Bearer {}'.format(AMAT_TWEET_SERVER_TOKEN)}
+      headers = {'Authorization': 'Bearer {}'.format(AMAT_TWEET_SERVER_TOKEN)}
       #bisogna inviare ogni tweet separatamente, se sono più di uno
       tweets = [dict_tweet] if isinstance(dict_tweet,dict) else dict_tweet 
       for tweet in tweets: 
